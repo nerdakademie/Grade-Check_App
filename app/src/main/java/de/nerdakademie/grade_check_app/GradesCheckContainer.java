@@ -23,7 +23,6 @@ import org.jsoup.select.Elements;
 
 public class GradesCheckContainer {
 
-    protected final int userID;
     private final String user;
     private final String pass;
     private String url = "https://cis.nordakademie.de/pruefungsamt/pruefungsergebnisse/?no_cache=1";
@@ -33,8 +32,7 @@ public class GradesCheckContainer {
     private List<String> cookies;
     private CookieManager cookieManager = new CookieManager();
 
-    public GradesCheckContainer(int userID, String user, String pass) {
-        this.userID = userID;
+    public GradesCheckContainer(String user, String pass) {
         this.user = user;
         this.pass = pass;
         try {
@@ -132,7 +130,7 @@ public class GradesCheckContainer {
         // conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
         // conn.setRequestProperty("Origin", "https://cis.nordakademie.de");
         // conn.setRequestProperty("Connection", "keep-alive");
-        // conn.setRequestProperty("Referer", url_login);
+        // conn.setRequestProperty("Referrer", url_login);
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setRequestProperty("Content-Length", Integer.toString(postParams.length()));
         conn.setRequestProperty("charset", "utf-8");
