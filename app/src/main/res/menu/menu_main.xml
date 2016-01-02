@@ -3,11 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="de.nerdakademie.grade_check_app.MainActivity">
     <item
-        android:id="@+id/dark_mode"
-        android:orderInCategory="98"
-        android:title="@string/dark_mode"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_settings"
         android:orderInCategory="99"
         android:title="@string/action_settings"

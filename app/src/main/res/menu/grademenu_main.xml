@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="de.nerdakademie.grade_check_app.GradeList">
+    <item
+        android:id="@+id/show_averagegrade"
+        android:orderInCategory="97"
+        android:title="@string/show_averagegrade"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/show_allcp"
+        android:orderInCategory="98"
+        android:title="@string/show_allcp"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/show_seminarcp"
+        android:orderInCategory="99"
+        android:title="@string/show_seminarcp"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/show_pb"
+        android:orderInCategory="100"
+        android:title="@string/show_pb"
+        app:showAsAction="never" />
+</menu>

@@ -42,6 +42,16 @@ public class GradesCheckContainer {
         }
     }
 
+    public Map<String,String> getGrades(){
+        try {
+            login();
+            return getGradesFromInput();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new HashMap<>();
+    }
+
     protected void checkForNewGrades() throws Exception {
         login();
         Map<String, String> newGrades = new HashMap<>();
