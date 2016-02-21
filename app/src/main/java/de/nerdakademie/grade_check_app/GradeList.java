@@ -1,23 +1,17 @@
 package de.nerdakademie.grade_check_app;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GradeList extends AppCompatActivity {
@@ -88,6 +82,9 @@ public class GradeList extends AppCompatActivity {
                     ArrayList<ArrayList<String>> child = new ArrayList<>();
                     Map<String,String> grades = checkContainer.getGrades();
                     for(String key: grades.keySet()){
+                        if (key.contains("&amp;")) {
+                            key = key.replace("&amp;", "&");
+                        }
                         if (key.length() > 0) {
                             group.add(key);
                             ArrayList<String> temparray = new ArrayList<>();

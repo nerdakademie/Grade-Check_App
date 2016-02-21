@@ -1,7 +1,5 @@
 package de.nerdakademie.grade_check_app;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -65,8 +63,10 @@ public class GradesCheckContainer {
             String grade = "";
             for (String s : newGrades.keySet())
                 grade += s + ": " + newGrades.get(s) + "\n";
-            if (grade.contains("*"))
-                grade += "\n*) Muendliche Nachpruefung moeglich.";
+            if (grade.contains("*")) {
+                grade += "\n (oral re-examination possible)";
+            }
+            // TODO Push Notification new grade
             // Receiver.instance.functions.sendMessage("Du hast neue Noten:\n" + grade, String.valueOf(userID));
         }
     }
