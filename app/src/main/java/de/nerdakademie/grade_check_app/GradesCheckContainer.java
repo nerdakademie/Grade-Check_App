@@ -31,7 +31,7 @@ public class GradesCheckContainer {
     private String url_login = "https://cis.nordakademie.de/?no_cache=1";
     private Map<String, String> oldGrades = new HashMap<>();
     private final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36";
-    private List<String> cookies;
+    public List<String> cookies;
     private CookieManager cookieManager = new CookieManager();
 
     public GradesCheckContainer(String user, String pass) {
@@ -68,8 +68,6 @@ public class GradesCheckContainer {
             if (grade.contains("*"))
                 grade += "\n*) Muendliche Nachpruefung moeglich.";
             // Receiver.instance.functions.sendMessage("Du hast neue Noten:\n" + grade, String.valueOf(userID));
-
-            //TODO listview update
         }
     }
 

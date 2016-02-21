@@ -1,6 +1,8 @@
 package de.nerdakademie.grade_check_app;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -9,7 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -21,8 +24,9 @@ public class GradeList extends AppCompatActivity {
 
     String user;
     String pass;
-    ArrayAdapter adapter;
+    ExpandableListViewAdapter adapter;
     private GradesCheckContainer checkContainer = null;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -42,21 +46,25 @@ public class GradeList extends AppCompatActivity {
     }
 
     private void initUI() {
-        ListView l = (ListView) GradeList.this.findViewById(R.id.listView);
+        ExpandableListView l = (ExpandableListView) GradeList.this.findViewById(R.id.listView);
         //<String>(this, android.R.layout.simple_list_item_1, items);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
+        adapter = new ExpandableListViewAdapter(GradeList.this, new ArrayList<String>(), new ArrayList<ArrayList<String>>());
         l.setAdapter(adapter);
+        progressDialog = new ProgressDialog(GradeList.this);
+        progressDialog.setTitle("loading grades");
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Message msg = Message.obtain();
                 try {
                     checkContainer.checkLoadOldGrades();
+                    msg.what = 1;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    msg.what = 0;
                 }
 
-                Message msg = Message.obtain();
-                msg.what = 1;
                 permissionHandler.sendMessage(msg);
             }
         }).start();
@@ -67,9 +75,28 @@ public class GradeList extends AppCompatActivity {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
+                case 0:
+                    Toast.makeText(GradeList.this, "password incorrect", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(GradeList.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intent);
+                    return true;
                 case 1:
                     //adapter.add("TE");
-                    adapter.addAll(checkContainer.getGrades().keySet());
+                    ArrayList<String> group = new ArrayList<>();
+                    ArrayList<ArrayList<String>> child = new ArrayList<>();
+                    Map<String,String> grades = checkContainer.getGrades();
+                    for(String key: grades.keySet()){
+                        if (key.length() > 0) {
+                            group.add(key);
+                            ArrayList<String> temparray = new ArrayList<>();
+                            temparray.add(grades.get(key));
+                            child.add(temparray);
+                        }
+                    }
+                    adapter.addData(group, child);
+                    progressDialog.dismiss();
                     return true;
                 default:
                     return true;

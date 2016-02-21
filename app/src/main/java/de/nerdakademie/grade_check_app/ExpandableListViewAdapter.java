@@ -1,58 +1,48 @@
 package de.nerdakademie.grade_check_app;
 
-import java.util.ArrayList;
-
-
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 @SuppressWarnings("unchecked")
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
-    public int videotest;
 	public ArrayList<String> groupItem, tempChild;
-	public ArrayList<Object> Childtem = new ArrayList<Object>();
-	public LayoutInflater minflater;
-	public Activity activity;
-	String click;
-	public ExpandableListViewAdapter(ArrayList<String> grList, ArrayList<Object> childItem) {
+	public ArrayList<ArrayList<String>> Childtem = new ArrayList<>();
+	LayoutInflater minflater;
+
+	public ExpandableListViewAdapter(Context context,ArrayList<String> grList, ArrayList<ArrayList<String>> childItem) {
 		groupItem = grList;
 		this.Childtem = childItem;
+		minflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
-	public void setInflater(LayoutInflater mInflater, Activity act) {
-		this.minflater = mInflater;
-		
-		//Link to MainActiviy
-		activity = act;
-	}
 
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
-		return null;
+		return Childtem.get(groupPosition).get(childPosition);
 	}
 
 	@Override
 	public long getChildId(int groupPosition, int childPosition) {
-		return 0;
+		return Childtem.get(groupPosition).get(childPosition).hashCode();
 	}
 
 	@Override
 	public View getChildView(int groupPosition, final int childPosition,
 							 boolean isLastChild, View convertView, ViewGroup parent) {
-		tempChild = (ArrayList<String>) Childtem.get(groupPosition);
-		TextView text = null;
+		tempChild = Childtem.get(groupPosition);
+
 		if (convertView == null) {
-			//convertView = minflater.inflate(R.layout.childrow, null);
+			convertView = minflater.inflate(R.layout.childrow, null);
 		}
-		//text = (TextView) convertView.findViewById(R.id.textView1);
+		TextView text = (TextView) convertView.findViewById(R.id.textView1);
 		text.setText(tempChild.get(childPosition));
 
 		return convertView;
@@ -61,12 +51,12 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return ((ArrayList<String>) Childtem.get(groupPosition)).size();
+		return (Childtem.get(groupPosition)).size();
 	}
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		return null;
+		return groupItem.get(groupPosition);
 	}
 
 	@Override
@@ -86,17 +76,17 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public long getGroupId(int groupPosition) {
-		return 0;
+		return groupItem.get(groupPosition).hashCode();
 	}
 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 							 View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			//convertView = minflater.inflate(R.layout.grouprow, null);
+			convertView = minflater.inflate(R.layout.grouprow, null);
 		}
 		((CheckedTextView) convertView).setText(groupItem.get(groupPosition));
-		((CheckedTextView) convertView).setChecked(isExpanded);
+//		((CheckedTextView) convertView).setChecked(isExpanded);
 		return convertView;
 	}
 
@@ -110,6 +100,10 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 	
-
+	public void addData(ArrayList<String> group, ArrayList<ArrayList<String>> child){
+		groupItem.addAll(group);
+		Childtem.addAll(child);
+		this.notifyDataSetChanged();
+	}
 
 }
