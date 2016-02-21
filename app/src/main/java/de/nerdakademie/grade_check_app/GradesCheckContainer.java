@@ -1,5 +1,7 @@
 package de.nerdakademie.grade_check_app;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,21 +37,10 @@ public class GradesCheckContainer {
     public GradesCheckContainer(String user, String pass) {
         this.user = user;
         this.pass = pass;
-        try {
-            checkLoadOldGrades();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public Map<String,String> getGrades(){
-        try {
-            login();
-            return getGradesFromInput();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new HashMap<>();
+        return oldGrades;
     }
 
     protected void checkForNewGrades() throws Exception {
@@ -77,10 +68,14 @@ public class GradesCheckContainer {
             if (grade.contains("*"))
                 grade += "\n*) Muendliche Nachpruefung moeglich.";
             // Receiver.instance.functions.sendMessage("Du hast neue Noten:\n" + grade, String.valueOf(userID));
+
+            //TODO listview update
         }
     }
 
-    private void checkLoadOldGrades() throws Exception {
+    protected void checkLoadOldGrades() throws Exception {
+        if(oldGrades.size() > 0)
+            return;
         login();
         oldGrades = getGradesFromInput();
     }
@@ -116,6 +111,8 @@ public class GradesCheckContainer {
             }
             if (grade.contains("(m)")) {
                 grade = grade.substring(0, 3) + "*";
+            } else if(grade.equals("")) {
+                grade = "-";
             }
             ret.put(module, grade);
         }
