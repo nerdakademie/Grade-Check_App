@@ -47,8 +47,9 @@ public class GradesCheckContainer {
         Map<String, String> grades = getGradesFromInput();
         for (String key : grades.keySet()) {
             String newGrade = grades.get(key);
-            if (newGrade.matches("\\s*"))
+            if (newGrade.matches("\\s*")) {
                 continue;
+            }
             if (!oldGrades.containsKey(key)) {
                 newGrades.put(key, newGrade);
             } else {
@@ -72,16 +73,18 @@ public class GradesCheckContainer {
     }
 
     protected void checkLoadOldGrades() throws Exception {
-        if(oldGrades.size() > 0)
+        if(oldGrades.size() > 0) {
             return;
+        }
         login();
         oldGrades = getGradesFromInput();
     }
 
     private void login() throws IOException {
         CookieHandler.setDefault(cookieManager);
-        if (this.cookies != null)
+        if (this.cookies != null) {
             return;
+        }
         String page = getPageContent(url_login);
         String postParams = getFormParams(page, user, pass);
 
@@ -210,10 +213,11 @@ public class GradesCheckContainer {
             String key = inputElement.attr("name");
             String value = inputElement.attr("value");
 
-            if (key.equals("user"))
+            if (key.equals("user")) {
                 value = username;
-            else if (key.equals("pass"))
+            } else if (key.equals("pass")) {
                 value = password;
+            }
             paramList.add(key + "=" + URLEncoder.encode(value, "UTF-8"));
         }
 
@@ -230,8 +234,9 @@ public class GradesCheckContainer {
     }
 
     private void setCookies(List<String> cookies) {
-        if (cookies != null)
+        if (cookies != null) {
             this.cookies = cookies;
+        }
     }
 
 }
